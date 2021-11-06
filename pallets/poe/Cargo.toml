@@ -1,0 +1,49 @@
+[package]
+authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+description = 'FRAME pallet poe'
+edition = '2018'
+homepage = 'https://substrate.dev'
+license = 'Unlicense'
+name = 'pallet-poe'
+repository = 'https://github.com/substrate-developer-hub/substrate-node-template/'
+version = '3.0.0'
+
+[package.metadata.docs.rs]
+targets = ['x86_64-unknown-linux-gnu']
+
+# alias "parity-scale-code" to "codec"
+# 编解码相关的工具包
+[dependencies.codec]
+default-features = false
+features = ['derive']
+package = 'parity-scale-codec'
+version = '2.0.0'
+
+[dependencies]
+# runtime开发所需的宏
+frame-support = { default-features = false, version = '3.0.0' }
+# 基础system的模块，里面提供了runtime开发常用类型 account id、block number
+frame-system = { default-features = false, version = '3.0.0' }
+sp-std = { default-features = false, version = '3.0.0' }
+
+
+
+# test环境中引入的工具包
+[dev-dependencies]
+serde = { version = "1.0.119" }
+# 定义了核心组件、核心类型、核心接口
+sp-core = { default-features = false, version = '3.0.0' }
+# 常用的io操作、文件读写、http请求
+sp-io = { default-features = false, version = '3.0.0' }
+# runtime开发常用的公共类型、接口
+sp-runtime = { default-features = false, version = '3.0.0' }
+
+# 编译标签，条件编译默认std
+[features]
+default = ['std']
+std = [
+    'sp-std/std',
+    'codec/std',
+    'frame-support/std',
+    'frame-system/std',
+]
