@@ -1,5 +1,10 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 pub use pallet::*;
+
+#[cfg(test)]
+mod mock;
+#[cfg(test)]
+mod tests;
 // 功能模块宏
 #[frame_support::pallet]
 pub mod pallet {
@@ -29,6 +34,7 @@ pub mod pallet {
         ProofAlreadyClaimed,
         NoSuchProof,
         NotProofOwner,
+        ProofTooLong,
     }
 
     // 存储单元宏
@@ -49,6 +55,14 @@ pub mod pallet {
         // 创建凭证
         #[pallet::weight(1_000)]
         pub fn create_claim(origin: OriginFor<T>, proof: Vec<u8>) -> DispatchResultWithPostInfo {
+            let mut too_long = false;
+            if proof.len() > 5 {
+                too_long = true;
+            }
+            ensure!(
+                !too_long, 
+                Error::<T>::ProofTooLong
+            );
             // 校验当前交易发送方是否签名，返回值为发送方ID
             let sender = ensure_signed(origin)?;
             // 校验凭证是否已经存在，存在返回一个错误
