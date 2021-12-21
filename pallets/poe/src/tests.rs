@@ -118,7 +118,7 @@ fn create_claim_failed_when_claim_is_too_long() {
         // 创建凭证时检查是否报错
         assert_noop!(
             PoeModule::create_claim(Origin::signed(1), claim.clone()),
-            Error::<Test>::ProofTooLong
+            Error::<Test>::ProofCross
         );
     })
 }
