@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 pub use pallet::*;
-
+use frame_support::traits::Get;
 #[cfg(test)]
 mod mock;
 #[cfg(test)]
@@ -17,6 +17,9 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         /// Because this pallet emits events, it depends on the runtime's definition of an event.
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+
+        #[pallet::constant]
+		type MaxLength: Get<u32>;
     }
 
     // 事件宏
@@ -55,12 +58,8 @@ pub mod pallet {
         // 创建凭证
         #[pallet::weight(1_000)]
         pub fn create_claim(origin: OriginFor<T>, proof: Vec<u8>) -> DispatchResultWithPostInfo {
-            let mut cross = false;
-            if proof.len() > 5 || proof.len() <= 0 {
-                cross = true;
-            }
             ensure!(
-                !cross, 
+                proof.len() <= T::MaxLength::get() as usize, 
                 Error::<T>::ProofCross
             );
             // 校验当前交易发送方是否签名，返回值为发送方ID

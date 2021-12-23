@@ -6,7 +6,6 @@ use sp_runtime::{
     testing::Header,
     traits::{BlakeTwo256, IdentityLookup},
 };
-
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
 type Block = frame_system::mocking::MockBlock<Test>;
 
@@ -25,6 +24,7 @@ frame_support::construct_runtime!(
 parameter_types! {
     pub const BlockHashCount: u64 = 250;
     pub const SS58Prefix: u8 = 42;
+    pub const MaxLength : u32 = 6;
 }
 
 impl system::Config for Test {
@@ -54,6 +54,7 @@ impl system::Config for Test {
 
 impl pallet_poe::Config for Test {
     type Event = Event;
+    type MaxLength = MaxLength;
 }
 
 // Build genesis storage according to the mock runtime.
